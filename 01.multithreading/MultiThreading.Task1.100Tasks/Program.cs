@@ -4,6 +4,8 @@
  * “Task #0 – {iteration number}”.
  */
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MultiThreading.Task1._100Tasks
 {
@@ -27,7 +29,34 @@ namespace MultiThreading.Task1._100Tasks
 
         static void HundredTasks()
         {
-            // feel free to add your code here
+            // ParallelCountingViaTasks();
+            ParallelCountingViaThreads();
+        }
+
+        private static void ParallelCountingViaThreads()
+        {
+            var threads = Enumerable.Range(0, TaskAmount)
+                .Select(x => new Thread(() => CountToThousand(x)))
+                .ToArray();
+            Parallel.ForEach(threads, thread => thread.Start());
+            Parallel.ForEach(threads, thread => thread.Join());
+        }
+
+        private static void ParallelCountingViaTasks()
+        {
+            var tasks = Enumerable.Range(0, TaskAmount)
+                .Select(x => new Task(() => CountToThousand(x)))
+                .ToArray();
+            Parallel.ForEach(tasks, task => task.Start());
+            Task.WaitAll(tasks);
+        }
+
+        static void CountToThousand(int taskNumber)
+        {
+            for (int iterationNumber = 0; iterationNumber < MaxIterationsCount; iterationNumber++)
+            {
+                Output(taskNumber, iterationNumber);
+            }
         }
 
         static void Output(int taskNumber, int iterationNumber)
