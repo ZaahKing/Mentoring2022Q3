@@ -10,7 +10,7 @@ namespace MultiThreading.Task3.MatrixMultiplier.Matrices
     {
         private const byte RandomMax = 100;
 
-        private const byte MaxPrintElements = 5;
+        private const byte MaxPrintElements = 25;
 
         private readonly long[,] _matrix;
 

@@ -29,21 +29,6 @@ namespace MultiThreading.Task1._100Tasks
 
         static void HundredTasks()
         {
-            // ParallelCountingViaTasks();
-            ParallelCountingViaThreads();
-        }
-
-        private static void ParallelCountingViaThreads()
-        {
-            var threads = Enumerable.Range(0, TaskAmount)
-                .Select(x => new Thread(() => CountToThousand(x)))
-                .ToArray();
-            Parallel.ForEach(threads, thread => thread.Start());
-            Parallel.ForEach(threads, thread => thread.Join());
-        }
-
-        private static void ParallelCountingViaTasks()
-        {
             var tasks = Enumerable.Range(0, TaskAmount)
                 .Select(x => new Task(() => CountToThousand(x)))
                 .ToArray();

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MultiThreading.Task3.MatrixMultiplier.Matrices;
 using MultiThreading.Task3.MatrixMultiplier.Multipliers;
@@ -11,15 +12,24 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
         [TestMethod]
         public void MultiplyMatrix3On3Test()
         {
-            TestMatrix3On3(new MatricesMultiplier());
+            ////TestMatrix3On3(new MatricesMultiplier());
             TestMatrix3On3(new MatricesMultiplierParallel());
         }
 
         [TestMethod]
         public void ParallelEfficiencyTest()
         {
-            // todo: implement a test method to check the size of the matrix which makes parallel multiplication more effective than
-            // todo: the regular one
+            var random = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                var matrixSize = random.Next(200, 500);
+                var m1 = new Matrix(matrixSize, matrixSize, true);
+                var m2 = new Matrix(matrixSize, matrixSize, true);
+
+                var t1 = GetExecutionime(m1, m2, new MatricesMultiplier());
+                var t2 = GetExecutionime(m1, m2, new MatricesMultiplierParallel());
+                Assert.IsTrue(t1 * 0.75 > t2); 
+            }
         }
 
         #region private methods
@@ -71,6 +81,30 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
             Assert.AreEqual(728, multiplied.GetElement(2, 2));
         }
 
-        #endregion
-    }
+        private long GetExecutionime(Matrix matrix1, Matrix matrix2, IMatricesMultiplier matrixMultiplier)
+        {
+            if (matrix1 == null)
+            {
+                throw new ArgumentNullException(nameof(matrixMultiplier));
+            }
+            if (matrix2 == null)
+            {
+                throw new ArgumentNullException(nameof(matrixMultiplier));
+            }
+            if (matrixMultiplier == null)
+            {
+                throw new ArgumentNullException(nameof(matrixMultiplier));
+            }
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            matrixMultiplier.Multiply(matrix1, matrix2);
+
+            stopwatch.Stop();
+
+            return stopwatch.ElapsedMilliseconds;
+        }
+    #endregion
+}
 }
