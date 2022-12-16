@@ -3,6 +3,7 @@ using CatalogService.Models.ItemModels;
 
 namespace CatalogService.Models;
 
+//As variant inmemory database
 internal static class DataFactory
 {
     public static IList<Category> GetInitialsCategories() =>
