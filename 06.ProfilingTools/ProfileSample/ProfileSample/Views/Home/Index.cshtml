@@ -1,0 +1,16 @@
+﻿@using System.Web.UI.WebControls
+@model List<string>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @foreach (var name in Model)
+    {
+        var path = $"/Content/Img/{name}";
+
+        <img src="@path" width="300" height="150"/>
+    }
+</div>
